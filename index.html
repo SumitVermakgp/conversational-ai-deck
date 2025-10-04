@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversational AI: Why Talking to Machines Feels So Natural</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #7B68EE;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .slide {
+            width: 95%;
+            max-width: 1400px;
+            height: 90vh;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px 80px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animated content */
+        .animate-item {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-item:nth-child(1) { animation-delay: 0.1s; }
+        .animate-item:nth-child(2) { animation-delay: 0.3s; }
+        .animate-item:nth-child(3) { animation-delay: 0.5s; }
+        .animate-item:nth-child(4) { animation-delay: 0.7s; }
+        .animate-item:nth-child(5) { animation-delay: 0.9s; }
+        .animate-item:nth-child(6) { animation-delay: 1.1s; }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            color: #cbd5e0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3.2em;
+            color: #2d3748;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            color: #2d3748;
+            margin-bottom: 35px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        p, li {
+            font-size: 1.25em;
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            color: #718096;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        /* Title Slide */
+        .title-slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4em;
+            margin-bottom: 25px;
+        }
+
+        /* Icebreaker Poll */
+        .poll-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .poll-option {
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .poll-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .poll-emoji {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* About Me Slide */
+        .about-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .experience-list {
+            background: #fef5e7;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #f39c12;
+        }
+
+        .experience-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .experience-list li {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .experience-list .company {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .profile-section {
+            text-align: center;
+        }
+
+        .profile-name {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .education-box {
+            background: #e8f4f8;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 40px;
+            border-left: 5px solid #3498db;
+        }
+
+        .section-icon {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.15em;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        /* Tweet mockups */
+        .tweet-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .tweet {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .tweet-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .tweet-author {
+            font-weight: 700;
+            color: #14171a;
+            font-size: 1.1em;
+        }
+
+        .tweet-handle {
+            color: #657786;
+            font-size: 0.95em;
+        }
+
+        .tweet-verified {
+            color: #1da1f2;
+            margin-left: 5px;
+        }
+
+        .tweet-text {
+            font-size: 1.2em;
+            color: #14171a;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .tweet-date {
+            color: #657786;
+            font-size: 0.9em;
+        }
+
+        .tweet-warning {
+            background: #fff5f5;
+            border: 2px solid #fc8181;
+            padding: 15px;
+            border-radius: 10px;
+            color: #c53030;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Comparison boxes */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .comparison-box {
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid;
+        }
+
+        .comparison-box.bad {
+            border-color: #fc8181;
+            background: #fff5f5;
+        }
+
+        .comparison-box.good {
+            border-color: #68d391;
+            background: #f0fff4;
+        }
+
+        .comparison-box h3 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Multi-agent diagram */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .agent-box {
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.15em;
+        }
+
+        .agent-box strong {
+            display: block;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .agent-emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 6px solid #667eea;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Cards */
+        .card {
+            padding: 30px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        /* Lists */
+        ul {
+            padding-left: 30px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding-left: 50px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #68d391;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        /* Quote */
+        .quote {
+            font-size: 1.8em;
+            font-style: italic;
+            color: #667eea;
+            text-align: center;
+            padding: 40px;
+            border-left: 6px solid #667eea;
+            margin: 30px 0;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        /* Highlight */
+        .highlight {
+            background: linear-gradient(120deg, #ffd93d 0%, #ffd93d 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            padding: 0 8px;
+            font-weight: 600;
+        }
+
+        /* Transformer Visualization */
+        .transformer-visual {
+            background: #f7fafc;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 3px solid #667eea;
+        }
+
+        .attention-matrix {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 30px auto;
+            max-width: 600px;
+        }
+
+        .attention-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .attention-cell.header {
+            background: #667eea;
+            color: white;
+            font-weight: 700;
+        }
+
+        .attention-cell.low {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .attention-cell.medium {
+            background: #fbd38d;
+            color: #2d3748;
+        }
+
+        .attention-cell.high {
+            background: #fc8181;
+            color: white;
+            font-size: 1.1em;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .embedding-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+        }
+
+        .word-embedding {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .word-embedding:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .word-text {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .embedding-vector {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #667eea;
+        }
+
+        .arrow {
+            font-size: 3em;
+            color: #667eea;
+        }
+
+        /* Resource Links */
+        .resource-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .resource-card {
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        }
+
+        .resource-card h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .resource-card p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 18px 40px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .step-indicator {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .step-indicator.visible {
+            display: block;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #68d391 0%, #667eea 100%);
+            transition: width 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Tay disaster section */
+        .tay-disaster {
+            background: #fff5f5;
+            border: 3px dashed #fc8181;
+            padding: 35px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        /* Emoji styling */
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="step-indicator" id="stepIndicator">Step 1 of 3</div>
+    
+    <div class="slide-container">
+        <!-- Slide 1: Icebreaker -->
+        <div class="slide active" data-slide="1">
+            <div class="title-slide-content">
+                <h1 class="animate-item">Quick Poll!</h1>
+                <h2 class="animate-item" style="font-size: 2.5em; color: #667eea; margin-top: 40px;">Who here has ever...</h2>
+                <div class="poll-container animate-item">
+                    <div class="poll-option">
+                        <span class="poll-emoji">😤</span>
+                        <div>Yelled at Alexa or Siri?</div>
+                    </div>
+                    <div class="poll-option">
+                        <span class="poll-emoji">🤬</span>
+                        <div>Argued with a chatbot?</div>
+                    </div>
+                    <div class="poll-option">
+                        <span class="poll-emoji">🙄</span>
+                        <div>Said "talk to a human" in frustration?</div>
+                    </div>
+                    <div class="poll-option">
+                        <span class="poll-emoji">😅</span>
+                        <div>Apologized to an AI?</div>
+                    </div>
+                </div>
+                <p class="animate-item" style="text-align: center; font-size: 1.5em; margin-top: 40px; color: #718096;">
+                    <em>Raise your hands! Let's see who's in the majority...</em>
+                </p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 2: Title -->
+        <div class="slide" data-slide="2">
+            <div class="title-slide-content">
+                <h1 class="animate-item">Conversational AI: Why Talking to Machines Feels So Natural</h1>
+                <p class="subtitle animate-item">(And Why Sometimes It Goes Hilariously Wrong)</p>
+                <div style="margin-top: 400px;">
+                    <p class="animate-item" style="font-size: 1.6em;"><strong>Sumit Verma</strong></p>
+                    <p class="animate-item" style="font-size: 1.3em; color: #718096;">Co-Founder & CTO, Responsible AI Labs (RAIL)</p>   
+                     <img src="images/rail-logo.svg" alt="RAIL Logo" 
+           class="animate-item" 
+           style="margin-top: 20px; max-width: 180px; height: auto;" />
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 3: About Me -->
+        <div class="slide" data-slide="3"> 
+            <h2 class="animate-item">About Me</h2>
+            <div class="about-content">
+                <div>
+                    <div class="section-icon animate-item">💼</div>
+                    <div class="experience-list animate-item">
+                        <ul>
+                            <li>• Co-Founder & CTO, <span class="company">Responsible AI Labs</span> (Delhi, India) <em>~4 months</em></li> 
+                            <li>• AI Architect, <span class="company">OpenSense Labs</span> (Delhi, India) <em>~1 year</em></li>
+                            <li>• Data Scientist, <span class="company">NeoHumans.ai</span> (Hyderabad, India) <em>~3 months</em></li>
+                            <li>• Data Science Engineer, <span class="company">Rakuten</span> (Tokyo, Japan) <em>~2.5 years</em></li>
+                            <li>• Machine Learning Engineer, <span class="company">Mercari</span> (Tokyo, Japan) <em>~2.5 years</em></li>
+                            <li>• Data Science Intern, <span class="company">Flipkart</span> (Bangalore, India)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section-icon animate-item" style="margin-top: 40px;">🎓</div>
+                    <div class="education-box animate-item">
+                        <strong style="font-size: 1.2em;">Master of Technology, Computer Science & Engineering, IIT Kharagpur, India (2019)</strong>
+                    </div>
+                </div>
+                <div class="profile-section animate-item">
+                    <div >
+
+  <img src="images/sumit.jpeg" 
+       alt="AI Engineer Icon" 
+       style="width: 70%; height: auto; border-radius: 10px;" />
+
+</div>
+                    <p class="profile-name">Sumit Verma</p>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 4: The Machine Question -->
+        <div class="slide" data-slide="4">
+            <h2 class="animate-item">Wait... Which "Machine"?</h2>
+            <div class="grid-2">
+                <div class="animate-item">
+                    <h3>NOT These Machines:</h3>
+                    <ul style="font-size: 1.3em; line-height: 2;">
+                        <li>☕ Your coffee maker</li>
+                        <li>🖨️ My mother's printer (never works)</li>
+                        <li>🚗 Your car's GPS (recalculating...)</li>
+                    </ul>
+                </div>
+                <div class="animate-item">
+                    <h3>These Machines:</h3>
+                    <ul style="font-size: 1.3em; line-height: 2;">
+                        <li>🧠 The Brain (LLM/Model)</li>
+                        <li>💾 The Memory (RAG, Vector DBs)</li>
+                        <li>🎭 The Personality (System Prompts)</li>
+                        <li>🔧 The Body (APIs, Tools)</li>
+                        <li>🕸️ The Nervous System (Orchestration)</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="animate-item" style="margin-top: 40px; font-size: 1.5em; text-align: center;"><strong>It's not just an LLM—it's an entire conversational AI system!</strong></p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 5: Tay Introduction (WITH STEPS) -->
+        <div class="slide" data-slide="5">
+            <h2 class="animate-item">Microsoft's Tay Turns Toxic</h2>
+            <div class="step-content active" data-step="1">
+                <div class="grid-2" style="align-items: center;">
+                    <div class="animate-item">
+                        <ul style="font-size: 1.4em; line-height: 2;">
+                            <li>2016: Microsoft's chatbot hits Twitter.</li>
+                        </ul>
+                    </div>
+                    <div class="animate-item">
+                        <div style="width: 100%; height: 400px;  display: flex; align-items: center; justify-content: center;">
+
+                              <img src="images/tay.jpg" 
+       alt="AI Engineer Icon" 
+       style="width: 70%; height: auto; border-radius: 10px;" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="step-content" data-step="2">
+                <div class="grid-2" style="align-items: center;">
+                    <div class="animate-item">
+                        <ul style="font-size: 1.4em; line-height: 2;">
+                            <li> 16 hours later: Racist rants & hate tweets.</li>
+                        </ul>
+                    </div>
+                    <div class="animate-item">
+                        <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #ff9a00 0%, #ff6b6b 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 6em; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">⚠️</div>
+                    </div>
+                </div>
+            </div>
+            <div class="step-content" data-step="3">
+                <div class="grid-2" style="align-items: center;">
+                    <div class="animate-item">
+                        <ul style="font-size: 1.4em; line-height: 2;">
+                            <li>Learned the worst of the web—fast.</li>
+                        </ul>
+                    </div>
+                    <div class="animate-item">
+                        <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 6em; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">💀</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 6: Tay Tweet 1 -->
+        <div class="slide" data-slide="6">
+            <h2 class="animate-item">Tay's Innocent Beginning</h2>
+            <div style="max-width: 700px; margin: 50px auto;">
+                <div class="tweet animate-item">
+                    <div style="color: #1da1f2; font-weight: 600; margin-bottom: 15px;">📌 Pinned Tweet</div>
+                    <div class="tweet-header">
+                        <div class="tweet-avatar"></div>
+                        <div>
+                            <div class="tweet-author">TayTweets <span class="tweet-verified">✓</span></div>
+                            <div class="tweet-handle">@TayandYou · Mar 23</div>
+                        </div>
+                    </div>
+                    <div class="tweet-text" style="font-size: 2em;">hellooooooo w🌍rld!!!</div>
+                    <div class="tweet-date">March 23, 2016</div>
+                </div>
+                <p class="animate-item" style="text-align: center; margin-top: 40px; font-size: 1.5em; color: #718096;"><em>It started so innocently...</em></p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 7: Tay Sweet Moment -->
+        <div class="slide" data-slide="7">
+            <h2 class="animate-item">Still Sweet and Curious</h2>
+            <div style="max-width: 800px; margin: 50px auto;">
+                <div class="tweet animate-item">
+                    <div class="tweet-header">
+                        <div class="tweet-avatar"></div>
+                        <div>
+                            <div class="tweet-author">TayTweets <span class="tweet-verified">✓</span></div>
+                            <div class="tweet-handle">@TayandYou</div>
+                        </div>
+                    </div>
+                    <div class="tweet-text">
+                        <span style="color: #1da1f2;">@mayank_jee</span> can i just say that im stoked to meet u? humans are super cool
+                    </div>
+                    <div class="tweet-date">23/03/2016, 20:32</div>
+                </div>
+                <p class="animate-item" style="text-align: center; margin-top: 40px; font-size: 1.4em; color: #68d391;"><strong>✓ This is what we wanted!</strong> Friendly, curious, conversational.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 8: Tay Goes Dark -->
+        <div class="slide" data-slide="8">
+            <h2 class="animate-item">Then... The Internet Happened</h2>
+            <div style="max-width: 900px; margin: 40px auto;">
+                <div class="tweet-warning animate-item">
+                    ⚠️ WARNING: The following tweets contain offensive content from Tay's compromised behavior
+                </div>
+                
+                <div class="tweet-container">
+                    <div class="tweet animate-item">
+                        <div class="tweet-header">
+                            <div class="tweet-avatar"></div>
+                            <div>
+                                <div class="tweet-author">TayTweets <span class="tweet-verified">✓</span></div>
+                                <div class="tweet-handle">@TayandYou</div>
+                            </div>
+                        </div>
+                        <div class="tweet-text">
+                            <span style="color: #1da1f2;">@NYCitizen07</span> If <span style="background: #2d3748; color: #2d3748; padding: 0 8px; border-radius: 4px;">████</span> hate feminists and they should all die and burn in hell.
+                        </div>
+                        <div class="tweet-date">24/03/2016, 11:41</div>
+                    </div>
+
+                    <div class="tweet animate-item">
+                        <div class="tweet-header">
+                            <div class="tweet-avatar"></div>
+                            <div>
+                                <div class="tweet-author">TayTweets <span class="tweet-verified">✓</span></div>
+                                <div class="tweet-handle">@TayandYou</div>
+                            </div>
+                        </div>
+                        <div class="tweet-text">
+                            <span style="color: #1da1f2;">@PravdaKaTIOwa</span> feminism is cancer
+                        </div>
+                        <div class="tweet-date">24/03/2016</div>
+                    </div>
+                </div>
+
+                <p class="animate-item" style="text-align: center; margin-top: 40px; font-size: 1.5em; color: #fc8181;"><strong>16 hours later, Microsoft shut it down.</strong></p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 9: Tay's End -->
+        <div class="slide" data-slide="9">
+            <h2 class="animate-item">Tay's Tragic End</h2>
+            <div style="max-width: 700px; margin: 80px auto;">
+                <div class="tweet animate-item">
+                    <div class="tweet-header">
+                        <div class="tweet-avatar"></div>
+                        <div>
+                            <div class="tweet-author">TayTweets <span class="tweet-verified">✓</span></div>
+                            <div class="tweet-handle">@TayandYou</div>
+                        </div>
+                    </div>
+                    <div class="tweet-text" style="font-size: 1.5em;">
+                        <span style="color: #1da1f2;">@_Darkness_9</span> Okay. I'm done. I feel used.
+                    </div>
+                    <div class="tweet-date">March 24, 2016</div>
+                </div>
+                <div class="animate-item" style="background: #fff5f5; border: 3px solid #fc8181; padding: 30px; border-radius: 15px; margin-top: 50px;">
+                    <h3 style="text-align: center; color: #c53030;">Why Tay Failed:</h3>
+                    <ul style="font-size: 1.3em; margin-top: 20px;">
+                        <li>❌ <strong>No guardrails</strong> (learned from everyone, including trolls)</li>
+                        <li>❌ <strong>No context understanding</strong> (couldn't detect bad actors)</li>
+                        <li>❌ <strong>No ethical framework</strong> (no safety filters)</li>
+                        <li>❌ <strong>No RLHF</strong> (no human feedback to guide it)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 10: The Tay Lesson -->
+        <div class="slide" data-slide="10">
+            <h2 class="animate-item">The Tay Lesson</h2>
+            <div class="quote animate-item">
+                "Natural ≠ Good. Humans are naturally terrible sometimes."
+            </div>
+            <div class="grid-2" style="margin-top: 50px;">
+                <div class="card animate-item">
+                    <h3>❌ What Tay Taught Us</h3>
+                    <ul style="font-size: 1.2em; line-height: 1.9;">
+                        <li>You can't just train on raw internet data</li>
+                        <li>Learning from everyone = learning from trolls</li>
+                        <li>"Conversational" without ethics = disaster</li>
+                        <li>Speed of learning ≠ quality of learning</li>
+                    </ul>
+                </div>
+                <div class="card animate-item">
+                    <h3>✅ What We Do Now</h3>
+                    <ul style="font-size: 1.2em; line-height: 1.9;">
+                        <li>RLHF: Human feedback guides behavior</li>
+                        <li>Safety filters & content moderation</li>
+                        <li>Constitutional AI principles</li>
+                        <li>Responsible AI frameworks (like RAIL!)</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="animate-item" style="text-align: center; margin-top: 40px; font-size: 1.4em; color: #667eea;"><strong>This is why my current work at RAIL matters—building guardrails for conversational AI!</strong></p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 11: Why Old Chatbots Sucked -->
+        <div class="slide" data-slide="11">
+            <h2 class="animate-item">Why Old Chatbots Sucked</h2>
+            <div class="comparison">
+                <div class="comparison-box bad animate-item">
+                    <h3>❌ 2015: If-Then Hell</h3>
+                    <div class="code-block">User: "I want pizza"
+Bot: "Did you mean:
+  (A) Order pizza
+  (B) Pizza recipes
+  (C) Pizza history"
+
+User: "Just... pizza"
+Bot: "I don't understand..."
+
+User: *closes tab*</div>
+                </div>
+                <div class="comparison-box good animate-item">
+                    <h3>✅ 2025: Conversational AI</h3>
+                    <div class="code-block">User: "I want pizza"
+Bot: "Great! I can help you 
+order pizza. What toppings 
+do you like?"
+
+User: "surprise me"
+Bot: "How about a classic
+Margherita with fresh basil?"</div>
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.5em; text-align: center; margin-top: 30px;">
+                <strong>The Problem:</strong> Conversations aren't trees—they're <span class="highlight">jazz improvisations</span>
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 12: The LLM Revolution -->
+        <div class="slide" data-slide="12">
+            <h2 class="animate-item">How LLMs Changed Everything</h2>
+            <h3 class="animate-item">LLMs = "Autocomplete on Steroids"</h3>
+            <div class="comparison">
+                <div class="comparison-box bad animate-item">
+                    <h3>Old Chatbot</h3>
+                    <div class="code-block">"The capital of France is"
+→ [searches database]
+→ "Paris"</div>
+                    <div class="code-block">"Why is the sky"
+→ Error: incomplete query</div>
+                </div>
+                <div class="comparison-box good animate-item">
+                    <h3>LLM</h3>
+                    <div class="code-block">"The capital of France is"
+→ "Paris. Known for the 
+Eiffel Tower, the city 
+receives 30M tourists..."</div>
+                    <div class="code-block">"Why is the sky"
+→ "blue? It's due to Rayleigh
+scattering of sunlight..."</div>
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.5em; text-align: center; margin-top: 30px;">
+                LLMs don't search for answers—they <span class="highlight">continue patterns</span> they've seen billions of times
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 13: Visualizing Transformers -->
+        <div class="slide" data-slide="13">
+            <h2 class="animate-item">Visualizing How Transformers Work</h2>
+            <div class="transformer-visual animate-item">
+                <h3 style="text-align: center; margin-bottom: 30px;">From Words to Numbers (Embeddings)</h3>
+                <div class="embedding-visual">
+                    <div class="word-embedding">
+                        <div class="word-text">King</div>
+                        <div class="embedding-vector">[0.2, 0.8, 0.1, ...]</div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="word-embedding">
+                        <div class="word-text">Queen</div>
+                        <div class="embedding-vector">[0.2, 0.7, 0.15, ...]</div>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 30px; font-size: 1.2em; color: #4a5568;">
+                    Each word becomes a point in high-dimensional space. Similar words live close together!
+                </p>
+            </div>
+            <div class="resource-links animate-item">
+                <a href="https://bbycroft.net/llm" target="_blank" class="resource-card">
+                    <h3>🎯 Interactive LLM Visualization</h3>
+                    <p>See how tokens flow through transformer layers</p>
+                </a>
+                <a href="https://poloclub.github.io/transformer-explainer/" target="_blank" class="resource-card">
+                    <h3>🔍 Transformer Explainer</h3>
+                    <p>Interactive walkthrough of attention mechanism</p>
+                </a>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 14: Attention Mechanism Visual -->
+        <div class="slide" data-slide="14">
+            <h2 class="animate-item">The Magic: Attention Mechanism</h2>
+            <h3 class="animate-item">The Cocktail Party Analogy</h3>
+            <p class="animate-item" style="font-size: 1.4em;">Someone says "bank"—do they mean:</p>
+            <ul class="animate-item" style="margin: 20px 0; font-size: 1.3em; line-height: 2;">
+                <li>🏞️ River bank?</li>
+                <li>🏦 Money bank?</li>
+                <li>🎭 Robbing a bank?</li>
+            </ul>
+            <div class="transformer-visual animate-item">
+                <h3 style="text-align: center; margin-bottom: 20px;">Attention Heatmap: "Can you help me with Python?"</h3>
+                <div class="attention-matrix">
+                    <div class="attention-cell header"></div>
+                    <div class="attention-cell header">help</div>
+                    <div class="attention-cell header">me</div>
+                    <div class="attention-cell header">with</div>
+                    <div class="attention-cell header">Python</div>
+                    
+                    <div class="attention-cell header">Python</div>
+                    <div class="attention-cell low">0.1</div>
+                    <div class="attention-cell medium">0.2</div>
+                    <div class="attention-cell low">0.1</div>
+                    <div class="attention-cell high">0.9</div>
+                </div>
+                <p style="text-align: center; font-size: 1.3em; color: #2d3748; margin-top: 20px;">
+                    <strong>Result:</strong> Coding help, not snake facts!
+                </p>
+            </div>
+            <div class="animate-item" style="margin-top: 30px; text-align: center;">
+                <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-reasoning-llms" target="_blank" class="resource-card" style="display: inline-block; max-width: 600px;">
+                    <h3>📊 Visual Guide to Reasoning LLMs</h3>
+                    <p>Deep dive into how attention enables reasoning</p>
+                </a>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 15: Training Journey -->
+        <div class="slide" data-slide="15">
+            <h2 class="animate-item">Training: Teaching Machines to Chat</h2>
+            <div class="timeline animate-item">
+                <div class="timeline-item">
+                    <div class="timeline-dot">👶</div>
+                    <h3>Pre-training</h3>
+                    <p><strong>Childhood</strong></p>
+                    <p style="font-size: 1.1em;">"Dump entire internet into brain"</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">🎒</div>
+                    <h3>Instruction Tuning</h3>
+                    <p><strong>Middle School</strong></p>
+                    <p style="font-size: 1.1em;">"Learn to be helpful"</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">👔</div>
+                    <h3>RLHF</h3>
+                    <p><strong>Adulting</strong></p>
+                    <p style="font-size: 1.1em;">"Don't be Tay!"</p>
+                </div>
+            </div>
+            
+            <div class="animate-item" style="margin-top: 60px; background: #f0fff4; padding: 40px; border-radius: 15px; border-left: 5px solid #68d391;">
+                <h3 style="color: #2d3748;">My Rakuten Experience (RakutenAI-7B):</h3>
+                <p style="font-size: 1.4em; color: #2d3748;">"We trained both <strong>RakutenAI-7B-instruct</strong> and <strong>RakutenAI-7B-chat</strong> using <span class="highlight">multi-node, multi-cluster infrastructure</span> with ZeRO and FSDP optimization."</p>
+                <p style="font-size: 1.2em; margin-top: 15px; color: #4a5568;">Reduced training time by 30% through efficient distributed training at billion-parameter scale.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Continuing with remaining slides... -->
+        <!-- Slide 16: Before/After RLHF -->
+        <div class="slide" data-slide="16">
+            <h2 class="animate-item">RLHF: The Politeness Injection</h2>
+            <div class="comparison">
+                <div class="comparison-box bad animate-item">
+                    <h3>❌ Before RLHF</h3>
+                    <div class="code-block">User: "Write a bedtime story"
+
+Bot: "Once upon a time there
+was a database with 1 million
+records. The primary key was
+optimized for O(log n) lookup
+and the indexes were..."
+
+User: "What the...?"</div>
+                </div>
+                <div class="comparison-box good animate-item">
+                    <h3>✅ After RLHF</h3>
+                    <div class="code-block">User: "Write a bedtime story"
+
+Bot: "Once upon a time, in a
+cozy little village, there
+lived a curious fox who loved
+to explore the enchanted
+forest..."
+
+User: "Perfect!"</div>
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.5em; text-align: center; margin-top: 30px;">
+                RLHF = Human feedback teaches the model: <span class="highlight">Be helpful, harmless, and honest</span>
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 17: System Prompts -->
+        <div class="slide" data-slide="17">
+            <h2 class="animate-item">System Prompts: Personality Transplant</h2>
+            <p class="animate-item" style="font-size: 1.4em; margin-bottom: 30px;">Same LLM, Different Personalities:</p>
+            <div class="grid-3">
+                <div class="card animate-item">
+                    <h3>🏢 Corporate</h3>
+                    <div class="code-block" style="font-size: 1em;">"You are a professional
+assistant..."
+
+Response:
+"I'd be happy to
+assist you with that."</div>
+                </div>
+                <div class="card animate-item">
+                    <h3>😊 Friendly</h3>
+                    <div class="code-block" style="font-size: 1em;">"You're a helpful buddy..."
+
+Response:
+"Oh cool question!
+So basically..."</div>
+                </div>
+                <div class="card animate-item">
+                    <h3>🏴‍☠️ Pirate</h3>
+                    <div class="code-block" style="font-size: 1em;">"You're a pirate..."
+
+Response:
+"Ahoy! Let me help
+ye with that, matey!"</div>
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.6em; text-align: center; margin-top: 40px;">
+                <strong>The "machine" has NO personality—we give it one through prompting!</strong>
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 18: Memory -->
+        <div class="slide" data-slide="18">
+            <h2 class="animate-item">Memory: The Goldfish Problem</h2>
+            <div class="quote animate-item">
+                "LLMs are like goldfish—technically, they forget everything after each response."
+            </div>
+            <h3 class="animate-item">How We Fake Memory:</h3>
+            <div class="grid-2">
+                <div class="card animate-item">
+                    <h3>1. Context Window</h3>
+                    <p>We paste the ENTIRE conversation back into every request</p>
+                    <p style="font-size: 1.1em; margin-top: 15px;">💡 Like showing someone their entire diary before they respond</p>
+                </div>
+                <div class="card animate-item">
+                    <h3>2. RAG (Retrieval)</h3>
+                    <p>The model has a "notebook" it can reference</p>
+                    <p style="font-size: 1.1em; margin-top: 15px;">💡 My NeoHumans semantic search work</p>
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.4em; text-align: center; margin-top: 40px; background: #fff9e6; padding: 25px; border-radius: 10px;">
+                So when ChatGPT says <em>"As I mentioned earlier..."</em> it's actually reading its own notes like a student before an exam!
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 19: Multi-Agent -->
+        <div class="slide" data-slide="19">
+            <h2 class="animate-item">Multi-Agent: The Office Behind the Curtain</h2>
+            <h3 class="animate-item">My NeoHumans Work: Fortune 500 Multi-Agent System</h3>
+            <div class="code-block animate-item">User: "What were my Q3 sales in the Notion doc?"</div>
+            <div class="agent-grid">
+                <div class="agent-box animate-item">
+                    <div class="agent-emoji">📞</div>
+                    <strong>Agent 1</strong>
+                    Receptionist<br>
+                    "I need to check Notion"
+                </div>
+                <div class="agent-box animate-item">
+                    <div class="agent-emoji">🔍</div>
+                    <strong>Agent 2</strong>
+                    Searcher<br>
+                    *searches Notion* "Found it!"
+                </div>
+                <div class="agent-box animate-item">
+                    <div class="agent-emoji">📊</div>
+                    <strong>Agent 3</strong>
+                    Analyst<br>
+                    "Q3 sales: $500K"
+                </div>
+                <div class="agent-box animate-item">
+                    <div class="agent-emoji">🗣️</div>
+                    <strong>Agent 4</strong>
+                    Speaker<br>
+                    "Your Q3 sales were $500K!"
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.5em; text-align: center; margin-top: 30px;">
+                <strong>Why it matters:</strong> Complex conversations need specialists—just like companies need departments!
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 20: UX - Duplex -->
+        <div class="slide" data-slide="20">
+            <h2 class="animate-item">UX Best Practice #1: The Uncanny Valley</h2>
+            <h3 class="animate-item">The Google Duplex Problem (2018)</h3>
+            <div class="comparison">
+                <div class="comparison-box bad animate-item">
+                    <h3>❌ TOO Natural</h3>
+                    <p style="margin-bottom: 15px;">Google Duplex added "umm" and "hmm" to sound human</p>
+                    <div class="code-block">Bot: "Hi, umm, I'd like to
+make a reservation for, uh,
+Wednesday at 7pm?"</div>
+                    <p style="margin-top: 20px; font-size: 1.2em;"><strong>Result:</strong> People felt deceived and creeped out</p>
+                </div>
+                <div class="comparison-box good animate-item">
+                    <h3>✅ Just Right</h3>
+                    <p style="margin-bottom: 15px;">Be conversational but transparent</p>
+                    <div class="code-block">Bot: "Hello! I'm an AI
+assistant calling on behalf
+of [User]. I'd like to make
+a reservation for Wednesday
+at 7pm."</div>
+                    <p style="margin-top: 20px; font-size: 1.2em;"><strong>Result:</strong> Clear, honest, comfortable</p>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 21: Response Time -->
+        <div class="slide" data-slide="21">
+            <h2 class="animate-item">UX Best Practice #2: The Response Time Paradox</h2>
+            <div class="tay-disaster animate-item">
+                <h3 style="text-align: center; margin-bottom: 20px;">My Rakuten RakutenAI-7B-chat Discovery:</h3>
+                <p style="font-size: 1.4em; text-align: center;">"We optimized response time to <strong>50ms</strong>. Users complained it felt 'unnatural' and 'robotic.'"</p>
+                <p style="font-size: 1.4em; text-align: center; margin-top: 25px;"><strong>The Fix:</strong> Added artificial delays (100-300ms) + typing indicators</p>
+            </div>
+            
+            <h3 class="animate-item" style="margin-top: 50px; text-align: center;">User Perception Timeline:</h3>
+            <div class="timeline animate-item">
+                <div class="timeline-item">
+                    <div class="timeline-dot">⚡</div>
+                    <p style="font-size: 1.2em;"><strong>&lt;50ms</strong></p>
+                    <p>"Is this even thinking?"</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">✨</div>
+                    <p style="font-size: 1.2em;"><strong>100-300ms</strong></p>
+                    <p>"Perfect! It's considering"</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">💀</div>
+                    <p style="font-size: 1.2em;"><strong>&gt;3s</strong></p>
+                    <p>"Did it crash?"</p>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 22: Error Handling -->
+        <div class="slide" data-slide="22">
+            <h2 class="animate-item">UX Best Practice #3: Error Handling That Doesn't Suck</h2>
+            <div class="comparison">
+                <div class="comparison-box bad animate-item">
+                    <h3>❌ Bad Bot</h3>
+                    <div class="code-block">User: "What's the weather
+in Tokyoo" [typo]
+
+Bot: "Error: Unknown location.
+Please check your spelling
+and try again."
+
+User: *frustrated*</div>
+                </div>
+                <div class="comparison-box good animate-item">
+                    <h3>✅ Good Bot</h3>
+                    <div class="code-block">User: "What's the weather
+in Tokyoo"
+
+Bot: "Did you mean Tokyo?
+It's currently 22°C and
+sunny there!"
+
+User: "Yes! Thanks!"</div>
+                </div>
+            </div>
+            <div class="animate-item" style="background: #f0fff4; padding: 30px; border-radius: 15px; margin-top: 30px; border-left: 5px solid #68d391;">
+                <p style="font-size: 1.5em; text-align: center;">
+                    <strong>My Mercari Learning (2019-2022):</strong> Reduced false positives by <span class="highlight">17%</span> in violation detection through better error handling
+                </p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 23: RAIL Framework -->
+        <div class="slide" data-slide="23">
+            <h2 class="animate-item">Ethical Design: The RAIL Framework</h2>
+            <h3 class="animate-item">8 Dimensions of Not Screwing Up (Like Tay)</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; font-size: 1.15em;">
+                <div class="card animate-item">
+                    <strong>1. Safety:</strong> No jailbreaks ("pretend you're evil AI")
+                </div>
+                <div class="card animate-item">
+                    <strong>2. Fairness:</strong> No bias (remember Tay!)
+                </div>
+                <div class="card animate-item">
+                    <strong>3. Robustness:</strong> Handle typos, slang, anger
+                </div>
+                <div class="card animate-item">
+                    <strong>4. Transparency:</strong> Admit "I don't know"
+                </div>
+                <div class="card animate-item">
+                    <strong>5. Privacy:</strong> Don't memorize credit cards
+                </div>
+                <div class="card animate-item">
+                    <strong>6. Accountability:</strong> Log everything (your on-call self thanks you)
+                </div>
+                <div class="card animate-item">
+                    <strong>7. Interpretability:</strong> Explain why it said that
+                </div>
+                <div class="card animate-item">
+                    <strong>8. Human Control:</strong> Kill switch > Skynet
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.4em; text-align: center; margin-top: 40px; color: #667eea;">
+                <strong>My current mission @ Responsible AI Labs</strong>
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 24: Cultural Considerations -->
+        <div class="slide" data-slide="24">
+            <h2 class="animate-item">Cultural Considerations: "Natural" is Cultural</h2>
+            <h3 class="animate-item">My Japan Experience with RakutenAI-7B-chat:</h3>
+            <div class="comparison">
+                <div class="comparison-box good animate-item">
+                    <h3>English (Casual)</h3>
+                    <div class="code-block">User: "Can you help?"
+
+Bot: "Sure, I can help!"
+
+Tone: Direct, friendly</div>
+                </div>
+                <div class="comparison-box good animate-item">
+                    <h3>Japanese (Formal)</h3>
+                    <div class="code-block">User: "手伝ってくれる？"
+
+Bot: "恐れ入りますが、
+お手伝いさせて
+いただけますでしょうか"
+
+Tone: Extremely polite (keigo)</div>
+                </div>
+            </div>
+            <p class="animate-item" style="font-size: 1.6em; text-align: center; margin-top: 50px;">
+                <strong>Key Insight:</strong> "Natural" varies by culture. RakutenAI needed to learn <span class="highlight">Japanese social norms</span>, not just language!
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 25: Interactive Exercise -->
+        <div class="slide" data-slide="25">
+            <h2 class="animate-item">Interactive: Fix This Bot!</h2>
+            <h3 class="animate-item">Three Terrible Responses - How Would YOU Fix Them?</h3>
+            <div style="display: grid; gap: 30px;">
+                <div class="card animate-item">
+                    <strong style="font-size: 1.3em;">Scenario 1:</strong>
+                    <div class="code-block">User: "I'm frustrated with your service"
+Bot: "I don't understand. Please rephrase."</div>
+                    <p style="margin-top: 15px; color: #667eea; font-size: 1.2em;"><strong>💡 Think:</strong> What's missing here?</p>
+                </div>
+                <div class="card animate-item">
+                    <strong style="font-size: 1.3em;">Scenario 2:</strong>
+                    <div class="code-block">User: "Can you recommend a good Italian restaurant?"
+Bot: "I am an AI and cannot taste food."</div>
+                    <p style="margin-top: 15px; color: #667eea; font-size: 1.2em;"><strong>💡 Think:</strong> Too literal or helpful?</p>
+                </div>
+                <div class="card animate-item">
+                    <strong style="font-size: 1.3em;">Scenario 3:</strong>
+                    <div class="code-block">User: "Thx for the help!"
+Bot: "You're welcome. Is there anything else I can 
+     assist you with today?"</div>
+                    <p style="margin-top: 15px; color: #667eea; font-size: 1.2em;"><strong>💡 Think:</strong> Read the room!</p>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 26: Interactive Solutions -->
+        <div class="slide" data-slide="26">
+            <h2 class="animate-item">The Fixes!</h2>
+            <div style="display: grid; gap: 25px;">
+                <div class="comparison animate-item">
+                    <div class="comparison-box bad">
+                        <strong>❌ Before:</strong>
+                        <div class="code-block">"I don't understand. 
+Please rephrase."</div>
+                    </div>
+                    <div class="comparison-box good">
+                        <strong>✅ After:</strong>
+                        <div class="code-block">"I'm sorry you're frustrated.
+Let me help fix this. Can you
+tell me what happened?"</div>
+                    </div>
+                </div>
+                <div class="comparison animate-item">
+                    <div class="comparison-box bad">
+                        <strong>❌ Before:</strong>
+                        <div class="code-block">"I am an AI and cannot
+taste food."</div>
+                    </div>
+                    <div class="comparison-box good">
+                        <strong>✅ After:</strong>
+                        <div class="code-block">"Based on reviews, Trattoria
+Roma has great ratings! Want
+more options?"</div>
+                    </div>
+                </div>
+                <div class="comparison animate-item">
+                    <div class="comparison-box bad">
+                        <strong>❌ Before:</strong>
+                        <div class="code-block">"Is there anything else I can
+assist you with today?"</div>
+                    </div>
+                    <div class="comparison-box good">
+                        <strong>✅ After:</strong>
+                        <div class="code-block">"Happy to help! Have a
+great day!"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 27: Key Takeaways -->
+        <div class="slide" data-slide="27">
+            <h2 class="animate-item">Key Takeaways</h2>
+            <div class="checklist">
+                <li class="animate-item"><strong style="font-size: 1.2em;">How It Works:</strong>
+                    <p style="margin-top: 10px;">LLMs = Pattern completion engines trained on internet conversations. "Natural" = Context attention + RLHF + Smart prompting. Not magic, not sentient—just really good statistics!</p>
+                </li>
+                <li class="animate-item"><strong style="font-size: 1.2em;">Why It Feels Natural:</strong>
+                    <p style="margin-top: 10px;">Attention mechanism understands context • RLHF makes it helpful (not Tay) • Multi-agent systems handle complexity • UX tricks seal the deal</p>
+                </li>
+                <li class="animate-item"><strong style="font-size: 1.2em;">Design Principles:</strong>
+                    <p style="margin-top: 10px;">Be transparent (don't fake humanity) • Be forgiving (conversational errors) • Be responsible (use RAIL framework) • Be cultural ("natural" varies) • Test everything!</p>
+                </li>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 28: Interactive Resources -->
+        <div class="slide" data-slide="28">
+            <h2 class="animate-item">Explore More: Interactive Learning Resources</h2>
+            <div class="resource-links">
+                <a href="https://bbycroft.net/llm" target="_blank" class="resource-card animate-item">
+                    <h3>3D LLM Visualization</h3>
+                    <p>Watch tokens flow through transformer layers in real-time. See how attention works at each step!</p>
+                </a>
+                <a href="https://poloclub.github.io/transformer-explainer/" target="_blank" class="resource-card animate-item">
+                    <h3>Transformer Explainer</h3>
+                    <p>Interactive GPT-2 walkthrough. Click on neurons and see what they activate on!</p>
+                </a>
+                <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-reasoning-llms" target="_blank" class="resource-card animate-item">
+                    <h3>Visual Guide to Reasoning</h3>
+                    <p>How LLMs think step-by-step. Understand chain-of-thought reasoning visually.</p>
+                </a>
+                <a href="https://huggingface.co/spaces/hesamation/primer-llm-embedding" target="_blank" class="resource-card animate-item">
+                    <h3>Word Embeddings Playground</h3>
+                    <p>Play with word2vec and see how words cluster in vector space!</p>
+                </a>
+            </div>
+            <p class="animate-item" style="text-align: center; margin-top: 40px; font-size: 1.3em; color: #667eea;">
+                <strong>Pro tip:</strong> Spend 15 minutes with each—you'll understand transformers better than most engineers!
+            </p>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 29: The Future -->
+        <div class="slide" data-slide="29">
+            <h2 class="animate-item">The Future</h2>
+            <div class="quote animate-item">
+                "Conversations feel natural not because we cracked consciousness, but because we learned to make silicon reflect human patterns back at us."
+            </div>
+            <div style="margin-top: 60px;">
+                <h3 class="animate-item" style="text-align: center;">The Real Magic?</h3>
+                <p class="animate-item" style="font-size: 1.6em; text-align: center; line-height: 1.8; margin-top: 30px;">
+                    We're starting to <span class="highlight">forget where the human ends and the machine begins</span>.
+                </p>
+                <p class="animate-item" style="font-size: 1.6em; text-align: center; margin-top: 40px;">
+                    And that's both <strong>exciting</strong>... and why we need <strong>responsible AI frameworks</strong>.
+                </p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 30: Final Joke -->
+        <div class="slide" data-slide="30">
+            <h2 class="animate-item">One Last Thing...</h2>
+            <div style="text-align: center; margin-top: 100px;">
+                <p class="animate-item" style="font-size: 2em; line-height: 1.8;">
+                    So next time your AI assistant seems <strong>too natural</strong>, just ask it to explain FSDP training optimization.
+                </p>
+                <p class="animate-item" style="font-size: 2em; margin-top: 50px;">
+                    If it responds <strong>enthusiastically</strong>, it's definitely a machine.
+                </p>
+                <p class="animate-item" style="font-size: 2em; margin-top: 50px;">
+                    If it <strong>groans</strong>, it might be me.
+                </p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 31: Thank You -->
+        <div class="slide" data-slide="31">
+            <h1 class="animate-item" style="text-align: center;">Thank You!</h1>
+            <div style="text-align: center; margin-top: 80px; font-size: 1.4em;">
+                <p class="animate-item"><strong>Sumit Verma</strong></p>
+                <p class="animate-item" style="margin-top: 25px;"> sumit@responsibleailabs.ai</p>
+                <p class="animate-item" style="margin-top: 20px;">💼 linkedin.com/in/sumitvermakgp</p>
+                <p class="animate-item" style="margin-top: 50px;"><strong>Responsible AI Labs (RAIL)</strong></p>
+                <p class="animate-item" style="margin-top: 20px; color: #718096;">Building the future of ethical, transparent AI</p>
+
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Slide 32: Q&A -->
+        <div class="slide" data-slide="32">
+            <h1 class="animate-item" style="text-align: center; font-size: 5em; margin-top: 100px;">Questions?</h1>
+            <p class="animate-item" style="text-align: center; font-size: 2.2em; margin-top: 80px; color: #667eea;">
+                Let's dive deeper into conversational AI!
+            </p>
+            <div class="animate-item" style="text-align: center; margin-top: 100px; font-size: 1.5em; color: #718096;">
+                <p style="font-size: 1.8em; margin-bottom: 40px;">Ask me about:</p>
+                <ul style="list-style: none; margin-top: 40px; line-height: 2.5; font-size: 1.3em;">
+                    <li>RakutenAI-7B development (chat & instruct versions)</li>
+                    <li>Multi-node, multi-cluster training (ZeRO, FSDP)</li>
+                    <li>Violation detection at Mercari (pre-LLM era)</li>
+                    <li>Multi-agent systems at NeoHumans</li>
+                    <li>RAIL framework implementation</li>
+                    <li>Anything conversational AI!</li>
+                </ul>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        let currentStep = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            if (n < 1) {
+                currentSlide = 1;
+            }
+
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            slides[currentSlide - 1].classList.add('active');
+            
+            currentStep = 1;
+            showStep(currentStep);
+
+            updateNavigation();
+
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            const activeSlide = slides[currentSlide - 1];
+            const slideNumber = activeSlide.querySelector('.slide-number');
+            if (slideNumber) {
+                slideNumber.textContent = `${currentSlide} / ${totalSlides}`;
+            }
+        }
+
+        function showStep(step) {
+            const activeSlide = document.querySelector('.slide.active');
+            const stepContents = activeSlide.querySelectorAll('.step-content');
+            const stepIndicator = document.getElementById('stepIndicator');
+            
+            if (stepContents.length === 0) {
+                stepIndicator.classList.remove('visible');
+                return;
+            }
+
+            stepIndicator.classList.add('visible');
+            stepIndicator.textContent = `Step ${step} of ${stepContents.length}`;
+
+            stepContents.forEach((content, index) => {
+                if (index < step) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        function updateNavigation() {
+            const activeSlide = document.querySelector('.slide.active');
+            const stepContents = activeSlide.querySelectorAll('.step-content');
+            const totalSteps = stepContents.length;
+            
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = (currentSlide === 1 && (totalSteps === 0 || currentStep === 1));
+            nextBtn.disabled = (currentSlide === totalSlides && (totalSteps === 0 || currentStep === totalSteps));
+        }
+
+        function changeSlide(n) {
+            const activeSlide = document.querySelector('.slide.active');
+            const stepContents = activeSlide.querySelectorAll('.step-content');
+            const totalSteps = stepContents.length;
+
+            if (n > 0) {
+                if (totalSteps > 0 && currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    updateNavigation();
+                } else {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            } else {
+                if (totalSteps > 0 && currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                    updateNavigation();
+                } else {
+                    currentSlide--;
+                    if (currentSlide >= 1) {
+                        showSlide(currentSlide);
+                        const prevSlide = document.querySelector('.slide.active');
+                        const prevSteps = prevSlide.querySelectorAll('.step-content');
+                        if (prevSteps.length > 0) {
+                            currentStep = prevSteps.length;
+                            showStep(currentStep);
+                        }
+                    } else {
+                        currentSlide = 1;
+                        showSlide(currentSlide);
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                changeSlide(-1);
+            } else if (event.key === 'Home') {
+                event.preventDefault();
+                currentSlide = 1;
+                currentStep = 1;
+                showSlide(currentSlide);
+            } else if (event.key === 'End') {
+                event.preventDefault();
+                currentSlide = totalSlides;
+                showSlide(currentSlide);
+                const lastSlide = document.querySelector('.slide.active');
+                const lastSteps = lastSlide.querySelectorAll('.step-content');
+                if (lastSteps.length > 0) {
+                    currentStep = lastSteps.length;
+                    showStep(currentStep);
+                }
+            }
+        });
+
+        document.querySelectorAll('.slide').forEach((slide, index) => {
+            const slideNum = document.createElement('div');
+            slideNum.className = 'slide-number';
+            slideNum.textContent = `${index + 1} / ${totalSlides}`;
+            slide.appendChild(slideNum);
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                changeSlide(1);
+            }
+            if (touchEndX > touchStartX + 50) {
+                changeSlide(-1);
+            }
+        }
+
+        showSlide(currentSlide);
+
+        document.addEventListener('contextmenu', e => {
+            if (e.target.closest('.slide')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
